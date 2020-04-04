@@ -1,0 +1,45 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head th:replace="layout :: head(${round.name} + ' | Add Question')"></head>
+<body>
+<div th:replace="layout :: nav('round')"></div>
+<nav>
+    <ol class="breadcrumb">
+        <li class="breadcrumb-item"><a class="text-secondary" href="/">Home</a></li>
+        <li class="breadcrumb-item"><a class="text-secondary" href="/quizzes">Quizzes</a></li>
+        <li class="breadcrumb-item"><a class="text-secondary" th:href="'/quiz/edit/' + ${quiz.id}" th:text="${quiz.name}"></a></li>
+        <li class="breadcrumb-item active" th:text="'Add Question (' + ${round.name} + ')'"></li>
+    </ol>
+</nav>
+<main class="container overflow-hidden" role="main">
+    <div class="row">
+        <h2 class="text-jh-primary">Add Question</h2>
+    </div>
+    <div class="row">
+        <div class="col">
+            <form th:action="@{'/round/' + ${round.id} + '/add-question'}" id="addForm" th:object="${question}" method="post">
+                <input th:field="*{id}" type="hidden">
+                <input th:field="*{questionNumber}" type="hidden">
+                <div class="form-group" th:if="${round.roundType.id == 1}">
+                    <label for="question">Question</label>
+                    <textarea type="text" class="form-control" rows="3" id="question" th:field="*{questionText}"></textarea>
+                </div>
+                <div class="form-group" th:if="${round.roundType.id == 2}">
+                    <label for="picture">Picture</label>
+                    <input type="file" class="form-control-file" id="picture" name="picture">
+                </div>
+                <div class="form-group">
+                    <label for="answer">Answer</label>
+                    <textarea type="text" class="form-control" rows="3" id="answer" th:field="*{answerText}"></textarea>
+                </div>
+                <div class="float-right">
+                    <button class="mx-1 btn btn-jh-primary" type="submit">Add</button>
+                    <a class=" mx-1 btn btn-secondary" th:href="@{'/quiz/edit/' + ${quiz.id}}">Cancel</a>
+                </div>
+            </form>
+        </div>
+    </div>
+</main>
+<div th:replace="layout :: scripts"></div>
+</body>
+</html>

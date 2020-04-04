@@ -1,0 +1,76 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head th:replace="layout :: head('Edit | ' + ${quiz.name})"></head>
+<body>
+<div th:replace="layout :: nav('quiz')"></div>
+<nav>
+    <ol class="breadcrumb">
+        <li class="breadcrumb-item"><a class="text-secondary" href="/">Home</a></li>
+        <li class="breadcrumb-item"><a class="text-secondary" href="/quizzes">Quizzes</a></li>
+        <li class="breadcrumb-item active" th:text="${quiz.name}"></li>
+    </ol>
+</nav>
+<main class="container overflow-hidden" role="main">
+    <div class="row">
+        <div class="col-sm-10">
+            <div class="d-inline-flex">
+                <h2 class="text-jh-primary" th:text="${quiz.name}"></h2>
+            </div>
+            <div class="d-inline-flex mx-1">
+                <a th:href="@{'/quiz/edit-details/' + ${quiz.id}}" class="text-secondary"><i
+                        class="fas fa-pencil-alt align-top"></i></a>
+            </div>
+        </div>
+        <div class="col-sm-2 text-right">
+            <a th:href="@{'/quiz/' + ${quiz.id} + '/add-round'}" class="btn btn-sm btn-outline-secondary align-center">
+                <i class="fas fa-plus"></i> Add Round</a>
+        </div>
+    </div>
+    <div class="row">
+        <div class="col">
+            <ul class="list-group">
+                <li class="list-group-item mt-2 px-2" th:each="round : ${quiz.rounds}">
+                    <div class="row">
+                        <div class="col-sm-9">
+                            <div class="d-inline-flex">
+                                <h4 th:text="${round.name}"></h4>
+                            </div>
+                            <div class="d-inline-flex mx-1">
+                                <a th:href="@{'/round/edit/' + ${round.id}}" class="text-secondary"><i
+                                        class="fas fa-pencil-alt align-top"></i></a>
+                            </div>
+                        </div>
+                        <div class="col-sm-3 text-right">
+                            <a th:href="@{'/round/' + ${round.id} + '/add-question'}"
+                               class="btn btn-sm btn-outline-secondary"><i class="fas fa-plus"></i> Add Question</a>
+                            <a th:href="'/round/download/' + ${round.id}"
+                               class="btn btn-sm btn-outline-secondary"><i class="fas fa-download"></i></a>
+                        </div>
+                    </div>
+                    <ul>
+                        <li class="list-group-item" th:each="question : ${round.questions}">
+                            <div class="row">
+                                <div class="col-sm-11">
+                                    <span th:if="${round.roundType.id} == 2">
+                                        <p class="my-0 d-inline-flex" th:text="${question.questionNumber} + '.  '"></p>
+                                        <i class="fas fa-image d-inline-flex"></i>
+                                    </span>
+                                    <p class="my-0" th:if="${round.roundType.id} != 2"
+                                       th:text="${question.questionNumber} + '.  ' + ${question.questionText}"></p>
+                                </div>
+                                <div class="col-sm-1 text-right">
+                                    <a th:href="@{'/question/' + ${question.id} + '/edit'}" class="text-secondary">
+                                        <i class="fas fa-pencil-alt"></i>
+                                    </a>
+                                </div>
+                            </div>
+                        </li>
+                    </ul>
+                </li>
+            </ul>
+        </div>
+    </div>
+</main>
+<div th:replace="layout :: scripts"></div>
+</body>
+</html>

@@ -1,0 +1,40 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head th:replace="layout :: head('Quizzes')"></head>
+<body>
+<div th:replace="layout :: nav('quiz')"></div>
+<nav>
+    <ol class="breadcrumb">
+        <li class="breadcrumb-item"><a class="text-secondary" href="/">Home</a></li>
+        <li class="breadcrumb-item active">Quizzes</li>
+    </ol>
+</nav>
+<main role="main">
+    <div class="container">
+        <div class="row">
+            <div class="col-md-10 text-jh-primary">
+                <h2>Quizzes</h2>
+            </div>
+            <div class="col-md-2 mt-1 text-right">
+                <a class="btn btn-outline-secondary" href="/quiz/add">
+                    <i class="fas fa-plus"></i> Add Quiz
+                </a>
+            </div>
+        </div>
+    </div>
+    <div class="container overflow-hidden">
+        <div class="card mb-2" th:each="quiz : ${quizzes}">
+            <div class="card-body">
+                <h5 class="card-title" th:text="${quiz.name}"></h5>
+                <p class="card-text" th:text="${quiz.description}"></p>
+            </div>
+            <div class="card-footer">
+                <a th:href="@{'/quiz/edit/' + ${quiz.id}}" class="btn btn-secondary">Edit</a>
+                <a href="#" class="btn btn-jh-primary ml-2">Present</a>
+            </div>
+        </div>
+    </div>
+</main>
+<div th:replace="layout :: scripts"></div>
+</body>
+</html>
