@@ -1,0 +1,45 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head th:replace="layout :: head('Log In')"></head>
+<body>
+<div th:replace="layout :: nav('home')"></div>
+<main class="container overflow-hidden" role="main">
+    <div class="container d-flex justify-content-center">
+        <div class="row">
+            <div class="card" style="width: 35rem;">
+                <div class="card-image mx-auto my-2 text-center">
+                    <img class="rounded-circle" src="//ssl.gstatic.com/accounts/ui/avatar_2x.png" alt="user"/>
+                </div>
+                <div class="card-body">
+                    <div th:replace="layout :: flash"></div>
+                    <form th:action="@{/login}" th:object="${user}" method="post" class="login">
+                        <input type="hidden" th:name="${_csrf.parameterName}" th:value="${_csrf.token}"/>
+                        <div class="row">
+                            <div class="col-lg-10 offset-lg-1">
+                                <div class="form-group">
+                                    <input class="form-control" th:field="*{username}" placeholder="username"/>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="row">
+                            <div class="col-lg-10 offset-lg-1">
+                                <div class="form-group">
+                                    <input class="form-control" type="password" th:field="*{password}"
+                                           placeholder="password"/>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="row">
+                            <div class="col-lg-4 offset-lg-4 text-center">
+                                <button type="submit" class="btn btn-jh-primary">Login</button>
+                            </div>
+                        </div>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
+    <div th:replace="layout :: scripts"></div>
+</main>
+</body>
+</html>

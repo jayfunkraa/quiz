@@ -16,8 +16,8 @@
                 <h2>Quizzes</h2>
             </div>
             <div class="col-md-2 mt-1 text-right">
-                <a class="btn btn-outline-secondary" href="/quiz/my-quizzes">
-                    <i class="fas fa-question"></i> My Quizzes
+                <a class="btn btn-outline-secondary" href="/quiz/add">
+                    <i class="fas fa-plus"></i> Add Quiz
                 </a>
             </div>
         </div>
@@ -29,6 +29,7 @@
                 <p class="card-text" th:text="${quiz.description}"></p>
             </div>
             <div class="card-footer">
+                <a th:href="@{'/quiz/edit/' + ${quiz.id}}" class="btn btn-secondary">Edit</a>
                 <a href="#" class="btn btn-jh-primary ml-2">Present</a>
             </div>
         </div>

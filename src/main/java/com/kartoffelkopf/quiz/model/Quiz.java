@@ -21,6 +21,10 @@ public class Quiz {
     @OneToMany
     private List<Round> rounds;
 
+    @ManyToOne
+    @JoinColumn(name = "user_id")
+    private User user;
+
     public Quiz() {
     }
 
@@ -70,5 +74,13 @@ public class Quiz {
 
     public void setRounds(List<Round> rounds) {
         this.rounds = rounds;
+    }
+
+    public User getUser() {
+        return user;
+    }
+
+    public void setUser(User user) {
+        this.user = user;
     }
 }
