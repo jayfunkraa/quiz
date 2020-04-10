@@ -26,7 +26,7 @@
             </div>
             <ul class="nav navbar-nav navbar-right text-light px-2">
                 <li>
-                    <span sec:authorize="isAuthenticated()" sec:authentication="name"></span>
+                    <a class="text-light" href="/user/edit" sec:authorize="isAuthenticated()" sec:authentication="name"></a>
                     <a class="text-light" href="/user/add" sec:authorize="not isAuthenticated()">Sign Up</a>
                 </li>
                 <li>
