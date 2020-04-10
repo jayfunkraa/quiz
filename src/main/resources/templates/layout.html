@@ -25,10 +25,16 @@
                 <a class="navbar-brand" href="/">Quiz Builder</a>
             </div>
             <ul class="nav navbar-nav navbar-right text-light px-2">
-                <li><span sec:authorize="isAuthenticated()" sec:authentication="name"></span></li>
+                <li>
+                    <span sec:authorize="isAuthenticated()" sec:authentication="name"></span>
+                    <a class="text-light" href="/user/add" sec:authorize="not isAuthenticated()">Sign Up</a>
+                </li>
                 <li>
                     <a class="text-light mx-2" href="/login" sec:authorize="not isAuthenticated()">Log In</a>
-                    <a class="text-light mx-2" href="/logoff" sec:authorize="isAuthenticated()"><i class="fas fa-sign-out-alt"></i></a>
+                    <form action="/logout" method="post" sec:authorize="isAuthenticated()">
+                        <input type="hidden" th:name="${_csrf.parameterName}" th:value="${_csrf.token}"/>
+                        <button class="btn btn-link text-light py-0" type="submit"><i class="fas fa-sign-out-alt"></i></button>
+                    </form>
                 </li>
             </ul>
             <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarCollapse"

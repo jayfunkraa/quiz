@@ -11,6 +11,7 @@ public class Role {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
     private String name;
+    private boolean defaultRole;
 
     public Role() {
     }
@@ -29,5 +30,13 @@ public class Role {
 
     public void setName(String name) {
         this.name = name;
+    }
+
+    public boolean isDefaultRole() {
+        return defaultRole;
+    }
+
+    public void setDefaultRole(boolean defaultRole) {
+        this.defaultRole = defaultRole;
     }
 }

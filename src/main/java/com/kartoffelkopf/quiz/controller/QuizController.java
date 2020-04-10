@@ -129,4 +129,17 @@ public class QuizController {
         quizService.delete(quiz);
         return "redirect:/quizzes";
     }
+
+    @RequestMapping("/my-quizzes")
+    public String userquizzes(Principal principal, Model model) {
+        User user = (User)((UsernamePasswordAuthenticationToken)principal).getPrincipal();
+        List<Quiz> quizzes = new ArrayList<>();
+        for (Quiz q : quizService.findAll()) {
+            if (q.getUser().getId() == user.getId()) {
+                quizzes.add(q);
+            }
+        }
+        model.addAttribute("quizzes", quizzes);
+        return "quiz/my-quizzes";
+    }
 }
