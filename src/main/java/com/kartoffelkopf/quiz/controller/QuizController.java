@@ -3,11 +3,13 @@ package com.kartoffelkopf.quiz.controller;
 import com.kartoffelkopf.quiz.model.Question;
 import com.kartoffelkopf.quiz.model.Quiz;
 import com.kartoffelkopf.quiz.model.Round;
+import com.kartoffelkopf.quiz.model.User;
 import com.kartoffelkopf.quiz.service.QuestionService;
 import com.kartoffelkopf.quiz.service.QuizService;
 import com.kartoffelkopf.quiz.service.RoundService;
 import com.kartoffelkopf.quiz.service.RoundTypeService;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -15,6 +17,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
 
+import java.security.Principal;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -46,7 +49,9 @@ public class QuizController {
     }
 
     @RequestMapping(value = "/quiz/add", method = RequestMethod.POST)
-    public String addPost(Quiz quiz) {
+    public String addPost(Quiz quiz, Principal principal) {
+        User user = (User)((UsernamePasswordAuthenticationToken)principal).getPrincipal();
+        quiz.setUser(user);
         quizService.save(quiz);
         return "redirect:/quizzes";
     }
@@ -123,5 +128,18 @@ public class QuizController {
 
         quizService.delete(quiz);
         return "redirect:/quizzes";
+    }
+
+    @RequestMapping("/my-quizzes")
+    public String userquizzes(Principal principal, Model model) {
+        User user = (User)((UsernamePasswordAuthenticationToken)principal).getPrincipal();
+        List<Quiz> quizzes = new ArrayList<>();
+        for (Quiz q : quizService.findAll()) {
+            if (q.getUser().getId() == user.getId()) {
+                quizzes.add(q);
+            }
+        }
+        model.addAttribute("quizzes", quizzes);
+        return "quiz/my-quizzes";
     }
 }
