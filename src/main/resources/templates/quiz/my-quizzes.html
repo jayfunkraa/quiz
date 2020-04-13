@@ -3,19 +3,26 @@
 <head th:replace="layout :: head('Quizzes')"></head>
 <body>
 <div th:replace="layout :: nav('quiz')"></div>
-<nav>
-    <ol class="breadcrumb">
-        <li class="breadcrumb-item"><a class="text-secondary" href="/">Home</a></li>
-        <li class="breadcrumb-item active">Quizzes</li>
-    </ol>
-</nav>
+<div class="container sticky-top bg-white">
+    <nav>
+        <ol class="breadcrumb">
+            <li class="breadcrumb-item"><a class="text-secondary" href="/">Home</a></li>
+            <li class="breadcrumb-item active">Quizzes</li>
+        </ol>
+    </nav>
+    <ul class="nav nav-tabs">
+        <li class="nav-item">
+            <a href="/quizzes" class="nav-link">All Quizzes</a>
+        </li>
+        <li class="nav-item">
+            <a href="/my-quizzes" class="nav-link active">My Quizzes</a>
+        </li>
+    </ul>
+</div>
 <main role="main">
     <div class="container">
         <div class="row">
-            <div class="col-md-10 text-jh-primary">
-                <h2>Quizzes</h2>
-            </div>
-            <div class="col-md-2 mt-1 text-right">
+            <div class="col-md-2 offset-md-10 my-1 text-right">
                 <a class="btn btn-outline-secondary" href="/quiz/add">
                     <i class="fas fa-plus"></i> Add Quiz
                 </a>
