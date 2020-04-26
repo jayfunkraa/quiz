@@ -17,6 +17,7 @@
     <div class="row">
         <div class="col">
             <form th:action="@{/quiz/add}" id="addForm" th:object="${quiz}" method="post">
+                <input type="hidden" th:name="${_csrf.parameterName}" th:value="${_csrf.token}"/>
                 <input th:field="*{id}" type="hidden">
                 <div class="form-group">
                     <label for="name">Name</label>

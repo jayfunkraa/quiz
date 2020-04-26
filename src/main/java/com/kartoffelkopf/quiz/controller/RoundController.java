@@ -1,18 +1,18 @@
 package com.kartoffelkopf.quiz.controller;
 
 import com.itextpdf.text.DocumentException;
+import com.kartoffelkopf.quiz.model.Picture;
 import com.kartoffelkopf.quiz.model.Question;
 import com.kartoffelkopf.quiz.model.Quiz;
 import com.kartoffelkopf.quiz.model.Round;
-import com.kartoffelkopf.quiz.service.QuestionService;
-import com.kartoffelkopf.quiz.service.QuizService;
-import com.kartoffelkopf.quiz.service.RoundService;
-import com.kartoffelkopf.quiz.service.RoundTypeService;
+import com.kartoffelkopf.quiz.service.*;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.*;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
+import org.springframework.util.MimeType;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.web.multipart.MultipartFile;
 
 import java.io.File;
 import java.io.FileNotFoundException;
@@ -34,6 +34,9 @@ public class RoundController {
     private QuestionService questionService;
 
     @Autowired
+    private PictureService pictureService;
+
+    @Autowired
     private QuizService quizService;
 
     @RequestMapping("/round/{id}/add-question")
@@ -48,8 +51,21 @@ public class RoundController {
     }
 
     @RequestMapping(value = "/round/{id}/add-question", method = RequestMethod.POST)
-    public String addQuestion(@PathVariable long id, Question question) {
+    public String addQuestion(@PathVariable long id,
+                              Question question,
+                              @RequestParam(required = false) MultipartFile file) {
         Quiz quiz = roundService.getQuiz(roundService.findById(id).get());
+
+        if (file != null && !file.isEmpty()) {
+            try {
+                Picture picture = new Picture(file.getOriginalFilename(), file.getContentType(), file.getBytes());
+                pictureService.save(picture);
+                question.setPicture(picture);
+            } catch (IOException e) {
+                e.printStackTrace();
+            }
+        }
+
         questionService.save(question);
         roundService.addQuestion(id, question);
         return "redirect:/quiz/edit/" + Long.toString(quiz.getId());

@@ -7,7 +7,8 @@
     <ol class="breadcrumb">
         <li class="breadcrumb-item"><a class="text-secondary" href="/">Home</a></li>
         <li class="breadcrumb-item"><a class="text-secondary" href="/quizzes">Quizzes</a></li>
-        <li class="breadcrumb-item"><a class="text-secondary" th:href="'/quiz/edit/' + ${quiz.id}" th:text="${quiz.name}"></a></li>
+        <li class="breadcrumb-item"><a class="text-secondary" th:href="'/quiz/edit/' + ${quiz.id}"
+                                       th:text="${quiz.name}"></a></li>
         <li class="breadcrumb-item active" th:text="'Edit Question (' + ${round.name} + ')'"></li>
     </ol>
 </nav>
@@ -17,21 +18,38 @@
     </div>
     <div class="row">
         <div class="col">
-            <form action="/question/save" id="addForm" method="post">
+            <form enctype="multipart/form-data" action="/question/save" id="addForm" method="post"
+                  th:object="${question}">
+                <input type="hidden" th:name="${_csrf.parameterName}" th:value="${_csrf.token}"/>
                 <input th:value="${quiz.id}" name="quizId" type="hidden">
-                <input th:value="${question.id}" name="questionId" type="hidden">
+                <input th:field="*{id}" name="questionId" type="hidden">
                 <input th:value="${question.questionNumber}" name="questionNumber" type="hidden">
                 <div class="form-group" th:if="${round.roundType.id == 1}">
                     <label for="question">Question</label>
-                    <textarea type="text" class="form-control" rows="3" id="question" th:field="${question.questionText}"></textarea>
+                    <textarea type="text" class="form-control" rows="3" id="question"
+                              th:field="*{questionText}"></textarea>
                 </div>
-                <div class="form-group" th:if="${round.roundType.id == 2}">
-                    <label for="picture">Picture</label>
-                    <input type="file" class="form-control-file" id="picture" name="picture">
+                <div class="container" th:if="${round.roundType.id == 2}">
+                    <div class="row">
+                        <div class="col-sm-4 offset-sm-4 text-center">
+                            <img id="picture-preview" class="img-thumbnail"
+                                 th:src="'/picture/get/' + ${question.picture.id}"
+                                 width="200px" th:alt="${question.picture.filename}">
+                            <input type="file" class="form-control-file" id="picture" accept=".bmp,.jpg,.png,.gif"
+                                   name="file" hidden>
+                        </div>
+                    </div>
+                    <div class="row">
+                        <div class="col-sm-2 offset-sm-5 text-center my-1">
+                            <a href="#" class="btn btn-sm btn-secondary" id="change-picture"
+                               onclick="$('#picture').click();">Change Picture</a>
+                        </div>
+                    </div>
                 </div>
                 <div class="form-group">
                     <label for="answerText">Answer</label>
-                    <textarea type="text" class="form-control" id="answerText" name="answerText" th:field="${question.answerText}"></textarea>
+                    <textarea type="text" class="form-control" id="answerText" name="answerText"
+                              th:field="*{answerText}"></textarea>
                 </div>
                 <div class="float-right">
                     <button class="mx-1 btn btn-jh-primary" type="submit">Save</button>
@@ -39,6 +57,7 @@
                 </div>
             </form>
             <form action="/question/delete" method="post" id="deleteForm">
+                <input type="hidden" th:name="${_csrf.parameterName}" th:value="${_csrf.token}"/>
                 <input type="hidden" name="delQuestionId" th:value="${question.id}">
                 <input type="hidden" name="delQuizId" th:value="${quiz.id}">
                 <button class="mx-1 btn btn-danger" type="submit">Delete</button>
