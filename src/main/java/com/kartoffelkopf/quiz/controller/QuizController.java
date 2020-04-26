@@ -1,9 +1,6 @@
 package com.kartoffelkopf.quiz.controller;
 
-import com.kartoffelkopf.quiz.model.Question;
-import com.kartoffelkopf.quiz.model.Quiz;
-import com.kartoffelkopf.quiz.model.Round;
-import com.kartoffelkopf.quiz.model.User;
+import com.kartoffelkopf.quiz.model.*;
 import com.kartoffelkopf.quiz.service.QuestionService;
 import com.kartoffelkopf.quiz.service.QuizService;
 import com.kartoffelkopf.quiz.service.RoundService;
@@ -20,6 +17,7 @@ import org.springframework.web.bind.annotation.RequestParam;
 import java.security.Principal;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.stream.StreamSupport;
 
 @Controller
 public class QuizController {
@@ -66,6 +64,11 @@ public class QuizController {
     public String addRoundForm(@PathVariable long id, Model model) {
         model.addAttribute("quiz", quizService.findById(id).get());
         model.addAttribute("round", new Round());
+        //TODO: Possibly remove this once everything is finished
+        if (StreamSupport.stream(roundTypeService.findAll().spliterator(), false).count() == 0) {
+            roundTypeService.save(new RoundType(1, "Regular"));
+            roundTypeService.save(new RoundType(2, "Picture"));
+        }
         model.addAttribute("roundTypes", roundTypeService.findAll());
         return "/quiz/add-round";
     }

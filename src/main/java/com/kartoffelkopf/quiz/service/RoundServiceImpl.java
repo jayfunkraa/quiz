@@ -17,10 +17,8 @@ import java.io.FileNotFoundException;
 import java.io.FileOutputStream;
 import java.io.IOException;
 import java.nio.file.Files;
-import java.util.ArrayList;
-import java.util.Iterator;
+import java.util.*;
 import java.util.List;
-import java.util.Optional;
 
 @Service
 public class RoundServiceImpl implements RoundService {
@@ -112,7 +110,7 @@ public class RoundServiceImpl implements RoundService {
         File file = new File("./" + getQuiz(round).getName() + "/" + round.getName() + ".pdf");
         file.getParentFile().mkdirs();
         Document document = new Document(PageSize.A4, 50, 50, 50, 50);
-        PdfWriter.getInstance(document, new FileOutputStream(file));
+        PdfWriter pdfWriter = PdfWriter.getInstance(document, new FileOutputStream(file));
         document.open();
 
         Paragraph header = new Paragraph(round.getName(), FontFactory.getFont(FontFactory.HELVETICA_BOLD, 24));
@@ -121,29 +119,55 @@ public class RoundServiceImpl implements RoundService {
 
         document.add(new Paragraph(" "));
 
-        PdfPTable table = new PdfPTable(2);
-        table.setTotalWidth(new float[]{30, 300});
-        table.setLockedWidth(true);
+        if (round.getRoundType().getId() == 2L) {
+            PdfPTable table = new PdfPTable(3);
+            table.setTotalWidth(new float[]{30, 200, 300,});
+            table.setLockedWidth(true);
 
+            for (Question q : round.getQuestions()) {
+                Phrase phrase = new Phrase(Integer.toString(q.getQuestionNumber()));
+                phrase.setFont(FontFactory.getFont(FontFactory.HELVETICA, 14));
+                PdfPCell cell = new PdfPCell(phrase);
+                cell.setVerticalAlignment(Element.ALIGN_MIDDLE);
+                cell.setHorizontalAlignment(Element.ALIGN_CENTER);
+                table.addCell(cell);
 
-        for (Question q: round.getQuestions()) {
-            Phrase phrase = new Phrase(Integer.toString(q.getQuestionNumber()));
-            phrase.setFont(FontFactory.getFont(FontFactory.HELVETICA, 14));
-            PdfPCell cell = new PdfPCell(phrase);
-            cell.setFixedHeight(40);
-            cell.setVerticalAlignment(Element.ALIGN_MIDDLE);
-            cell.setHorizontalAlignment(Element.ALIGN_CENTER);
-            table.addCell(cell);
+                Image image = Image.getInstance(q.getPicture().getBytes());
+                table.addCell(image);
 
-            cell = new PdfPCell();
-            cell.setFixedHeight(40);
-            cell.setVerticalAlignment(Element.ALIGN_MIDDLE);
-            cell.setHorizontalAlignment(Element.ALIGN_CENTER);
-            cell.setCellEvent(new MyCellField("answer_" + q.getQuestionNumber()));
-            table.addCell(cell);
+                cell = new PdfPCell();
+                cell.setFixedHeight(40);
+                cell.setVerticalAlignment(Element.ALIGN_MIDDLE);
+                cell.setHorizontalAlignment(Element.ALIGN_CENTER);
+                cell.setCellEvent(new MyCellField("answer_" + q.getQuestionNumber()));
+                table.addCell(cell);
+            }
+            document.add(table);
 
+        } else {
+            PdfPTable table = new PdfPTable(2);
+            table.setTotalWidth(new float[]{30, 300});
+            table.setLockedWidth(true);
+
+            for (Question q : round.getQuestions()) {
+                Phrase phrase = new Phrase(Integer.toString(q.getQuestionNumber()));
+                phrase.setFont(FontFactory.getFont(FontFactory.HELVETICA, 14));
+                PdfPCell cell = new PdfPCell(phrase);
+                cell.setFixedHeight(40);
+                cell.setVerticalAlignment(Element.ALIGN_MIDDLE);
+                cell.setHorizontalAlignment(Element.ALIGN_CENTER);
+                table.addCell(cell);
+
+                cell = new PdfPCell();
+                cell.setFixedHeight(40);
+                cell.setVerticalAlignment(Element.ALIGN_MIDDLE);
+                cell.setHorizontalAlignment(Element.ALIGN_CENTER);
+                cell.setCellEvent(new MyCellField("answer_" + q.getQuestionNumber()));
+                table.addCell(cell);
+
+            }
+            document.add(table);
         }
-        document.add(table);
         document.close();
 
         HttpHeaders headers = new HttpHeaders();

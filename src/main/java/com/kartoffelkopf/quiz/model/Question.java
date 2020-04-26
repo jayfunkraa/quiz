@@ -1,9 +1,6 @@
 package com.kartoffelkopf.quiz.model;
 
-import javax.persistence.Entity;
-import javax.persistence.GeneratedValue;
-import javax.persistence.GenerationType;
-import javax.persistence.Id;
+import javax.persistence.*;
 
 @Entity
 public class Question {
@@ -15,7 +12,9 @@ public class Question {
     private int questionNumber;
     private String questionText;
     private String answerText;
-    private byte[] picture;
+
+    @OneToOne
+    private Picture picture;
 
     public Question() {
     }
@@ -52,11 +51,11 @@ public class Question {
         this.answerText = answerText;
     }
 
-    public byte[] getPicture() {
+    public Picture getPicture() {
         return picture;
     }
 
-    public void setPicture(byte[] picture) {
+    public void setPicture(Picture picture) {
         this.picture = picture;
     }
 }

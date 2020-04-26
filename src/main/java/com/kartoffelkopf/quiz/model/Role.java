@@ -16,6 +16,11 @@ public class Role {
     public Role() {
     }
 
+    public Role(String name, boolean defaultRole) {
+        this.name = name;
+        this.defaultRole = defaultRole;
+    }
+
     public Long getId() {
         return id;
     }

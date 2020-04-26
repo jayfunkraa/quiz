@@ -1,5 +1,6 @@
 package com.kartoffelkopf.quiz.controller;
 
+import com.kartoffelkopf.quiz.model.Role;
 import com.kartoffelkopf.quiz.model.User;
 import com.kartoffelkopf.quiz.service.RoleService;
 import com.kartoffelkopf.quiz.service.UserService;
@@ -18,6 +19,7 @@ import org.springframework.web.bind.annotation.RequestParam;
 import java.security.Principal;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.stream.StreamSupport;
 
 @Controller
 public class UserController {
@@ -42,6 +44,11 @@ public class UserController {
         String passwordHash = passwordEncoder.encode(user.getPassword());
         user.setPassword(passwordHash);
         user.setEnabled(true);
+        //TODO: Possibly remove this check once everything is finished
+        if (StreamSupport.stream(roleService.findAll().spliterator(), false).count() == 0) {
+            Role userRole = new Role("USER", true);
+            roleService.save(userRole);
+        }
         user.setRole(roleService.getDefaultRole());
         userService.save(user);
         return "redirect:/login";

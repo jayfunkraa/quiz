@@ -27,12 +27,13 @@
   </component>
   <component name="DBNavigator.Project.DatabaseConsoleManager">
     <connection id="4e40c484-cf93-471c-9ec8-b8daa022461e">
-      <console name="Local" type="STANDARD" schema="quiz" session="Main"><![CDATA[update Question set questionText = 'How?', `answerText` = 'Magic' where id = 1
-update Question set questionText = 'When?', `answerText` = 'Then' where id = 2
-update Question set questionText = 'How many?', `answerText` = '2' where id = 3
+      <console name="Local" type="STANDARD" schema="quiz" session="Main"><![CDATA[update Question set picture_id = 1 where id in (9,10);
 
-select * from `Question`]]></console>
-      <console name="Local 1" type="STANDARD" schema="quiz" session="Main"><![CDATA[select * from `Question`]]></console>
+select *
+from `Round`
+join Round_Question on Round.id = Round_Question.Round_id
+join Question on Round_Question.questions_id = Question.id
+where Round.roundType_id = 2;]]></console>
     </connection>
   </component>
   <component name="DBNavigator.Project.DatabaseFileManager">
@@ -63,7 +64,9 @@ select * from `Question`]]></console>
     <filters />
   </component>
   <component name="DBNavigator.Project.ScriptExecutionManager" clear-outputs="true">
-    <recently-used-interfaces />
+    <recently-used-interfaces>
+      <mapping database-type="MYSQL" interface-id="DEFAULT" />
+    </recently-used-interfaces>
   </component>
   <component name="DBNavigator.Project.Settings">
     <connections>
