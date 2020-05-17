@@ -17,7 +17,10 @@
                 <h2 th:text="${quiz.name}"></h2>
                 <h5 th:text="${quiz.quizmaster}"></h5>
                 <p th:text="${quiz.description}"></p>
-                <p><a class="btn btn-secondary" href="#" role="button">Present &raquo;</a></p>
+                <p>
+                    <a class="btn btn-secondary" th:href="'/quiz/present/' + ${quiz.id}" role="button">Present</a>
+                    <a th:href="'/quiz/download/' + ${quiz.id}" class="btn btn-secondary ml-2">Download</a>
+                </p>
             </div>
         </div>
         <hr>

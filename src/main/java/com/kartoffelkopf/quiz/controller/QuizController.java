@@ -1,11 +1,13 @@
 package com.kartoffelkopf.quiz.controller;
 
+import com.itextpdf.text.DocumentException;
 import com.kartoffelkopf.quiz.model.*;
 import com.kartoffelkopf.quiz.service.QuestionService;
 import com.kartoffelkopf.quiz.service.QuizService;
 import com.kartoffelkopf.quiz.service.RoundService;
 import com.kartoffelkopf.quiz.service.RoundTypeService;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.ResponseEntity;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
@@ -14,6 +16,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
 
+import java.io.IOException;
 import java.security.Principal;
 import java.util.ArrayList;
 import java.util.List;
@@ -134,7 +137,7 @@ public class QuizController {
     }
 
     @RequestMapping("/my-quizzes")
-    public String userquizzes(Principal principal, Model model) {
+    public String userQuizzes(Principal principal, Model model) {
         User user = (User)((UsernamePasswordAuthenticationToken)principal).getPrincipal();
         List<Quiz> quizzes = new ArrayList<>();
         for (Quiz q : quizService.findAll()) {
@@ -144,5 +147,24 @@ public class QuizController {
         }
         model.addAttribute("quizzes", quizzes);
         return "quiz/my-quizzes";
+    }
+
+    @RequestMapping("/quiz/present/{id}")
+    public String presentQuiz(@PathVariable long id, Model model) {
+        model.addAttribute("quiz", quizService.findById(id).get());
+        return "present";
+    }
+
+    @RequestMapping("/quiz/download/{id}")
+    public ResponseEntity<byte[]> getAnswerSheets(@PathVariable long id) {
+        Quiz quiz = quizService.findById(id).get();
+        ResponseEntity<byte[]> response = null;
+
+        try {
+            response = quizService.generatePdf(quiz);
+        } catch (IOException | DocumentException e) {
+            e.printStackTrace();
+        }
+        return response;
     }
 }

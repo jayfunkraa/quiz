@@ -49,7 +49,7 @@ public class RoundServiceImpl implements RoundService {
         roundDao.delete(round);
     }
 
-    class MyCellField implements PdfPCellEvent {
+    static class MyCellField implements PdfPCellEvent {
         protected String fieldname;
         public MyCellField(String fieldname) {
             this.fieldname = fieldname;
@@ -119,8 +119,9 @@ public class RoundServiceImpl implements RoundService {
 
         document.add(new Paragraph(" "));
 
+        PdfPTable table;
         if (round.getRoundType().getId() == 2L) {
-            PdfPTable table = new PdfPTable(3);
+            table = new PdfPTable(3);
             table.setTotalWidth(new float[]{30, 200, 300,});
             table.setLockedWidth(true);
 
@@ -142,10 +143,9 @@ public class RoundServiceImpl implements RoundService {
                 cell.setCellEvent(new MyCellField("answer_" + q.getQuestionNumber()));
                 table.addCell(cell);
             }
-            document.add(table);
 
         } else {
-            PdfPTable table = new PdfPTable(2);
+            table = new PdfPTable(2);
             table.setTotalWidth(new float[]{30, 300});
             table.setLockedWidth(true);
 
@@ -166,8 +166,8 @@ public class RoundServiceImpl implements RoundService {
                 table.addCell(cell);
 
             }
-            document.add(table);
         }
+        document.add(table);
         document.close();
 
         HttpHeaders headers = new HttpHeaders();
@@ -175,5 +175,4 @@ public class RoundServiceImpl implements RoundService {
         headers.setContentDisposition(ContentDisposition.builder("inline").filename(round.getName() + ".pdf").build());
         return new ResponseEntity<>(Files.readAllBytes(file.toPath()), headers, HttpStatus.OK);
     }
-
 }
