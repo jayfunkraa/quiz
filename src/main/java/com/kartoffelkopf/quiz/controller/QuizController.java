@@ -145,4 +145,10 @@ public class QuizController {
         model.addAttribute("quizzes", quizzes);
         return "quiz/my-quizzes";
     }
+
+    @RequestMapping("quiz/present/{id}")
+    public String presentQuiz(@PathVariable long id, Model model) {
+        model.addAttribute("quiz", quizService.findById(id).get());
+        return "present";
+    }
 }

@@ -119,8 +119,9 @@ public class RoundServiceImpl implements RoundService {
 
         document.add(new Paragraph(" "));
 
+        PdfPTable table;
         if (round.getRoundType().getId() == 2L) {
-            PdfPTable table = new PdfPTable(3);
+            table = new PdfPTable(3);
             table.setTotalWidth(new float[]{30, 200, 300,});
             table.setLockedWidth(true);
 
@@ -142,10 +143,9 @@ public class RoundServiceImpl implements RoundService {
                 cell.setCellEvent(new MyCellField("answer_" + q.getQuestionNumber()));
                 table.addCell(cell);
             }
-            document.add(table);
 
         } else {
-            PdfPTable table = new PdfPTable(2);
+            table = new PdfPTable(2);
             table.setTotalWidth(new float[]{30, 300});
             table.setLockedWidth(true);
 
@@ -166,8 +166,8 @@ public class RoundServiceImpl implements RoundService {
                 table.addCell(cell);
 
             }
-            document.add(table);
         }
+        document.add(table);
         document.close();
 
         HttpHeaders headers = new HttpHeaders();

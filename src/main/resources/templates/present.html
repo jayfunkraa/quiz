@@ -1,0 +1,79 @@
+<!doctype html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+
+    <title th:text="${quiz.name}"></title>
+
+    <link rel="stylesheet" href="/vendor/reveal/css/reset.css">
+    <link rel="stylesheet" href="/vendor/reveal/css/reveal.css">
+    <link rel="stylesheet" href="/vendor/reveal/css/theme/black.css">
+
+</head>
+<body>
+<div class="reveal">
+    <div class="slides">
+        <section><h1 th:text="${quiz.name}"></h1></section>
+        <section th:each="round : ${quiz.rounds}">
+            <section><h1 th:text="${round.name}"></h1></section>
+            <section th:if="${round.roundType.id == 1}" th:each="question : ${round.questions}"
+                     th:text="${round.roundType.id == 1} ? ${question.questionNumber} + '.  ' + ${question.questionText}"></section>
+            <section th:if="${round.roundType.id == 2}" th:each="question : ${round.questions}"
+                     th:data-background-image="'/picture/get/' + ${question.picture.id}"
+                     data-background-size="contain"></section>
+            <section th:if="${round.roundType.id == 2}">
+                <table>
+                    <tr>
+                        <td th:each="question : ${round.questions.subList(0, round.questions.size() > 5 ? 5 : round.questions.size())}" style="text-align:center">
+                            <h5 th:text="${question.questionNumber}"></h5>
+                        </td>
+                    </tr>
+                    <tr>
+                        <td th:each="question : ${round.questions.subList(0, round.questions.size() > 5 ? 5 : round.questions.size())}">
+                            <img th:src="'/picture/get/' + ${question.picture.id}" alt="" width="200px">
+                        </td>
+                    </tr>
+                </table>
+            </section>
+            <section th:if="${round.roundType.id == 2 && round.questions.size() > 5}">
+                <table>
+                    <tr>
+                        <td th:each="question : ${round.questions.subList(5,round.questions.size())}" style="text-align:center">
+                            <h5 th:text="${question.questionNumber}"></h5>
+                        </td>
+                    </tr>
+                    <tr>
+                        <td th:each="question : ${round.questions.subList(5,round.questions.size())}">
+                            <img th:src="'/picture/get/' + ${question.picture.id}" alt="" width="200px">
+                        </td>
+                    </tr>
+                </table>
+            </section>
+        </section>
+    </div>
+</div>
+
+<script src="/vendor/reveal/js/reveal.js"></script>
+
+<script>
+			Reveal.initialize({
+				hash: true,
+				dependencies: [
+					{ src: '/vendor/reveal/plugin/markdown/marked.js' },
+					{ src: '/vendor/reveal/plugin/markdown/markdown.js' },
+					{ src: '/vendor/reveal/plugin/highlight/highlight.js' },
+					{ src: '/vendor/reveal/plugin/notes/notes.js', async: true }
+				]
+			});
+			Reveal.configure({
+                keyboard: {
+                    27: function() {
+                        window.location.href = '/quizzes';
+                    }
+                }
+            });
+
+</script>
+</body>
+</html>
