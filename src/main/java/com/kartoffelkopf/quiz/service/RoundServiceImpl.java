@@ -49,7 +49,7 @@ public class RoundServiceImpl implements RoundService {
         roundDao.delete(round);
     }
 
-    class MyCellField implements PdfPCellEvent {
+    static class MyCellField implements PdfPCellEvent {
         protected String fieldname;
         public MyCellField(String fieldname) {
             this.fieldname = fieldname;
@@ -175,5 +175,4 @@ public class RoundServiceImpl implements RoundService {
         headers.setContentDisposition(ContentDisposition.builder("inline").filename(round.getName() + ".pdf").build());
         return new ResponseEntity<>(Files.readAllBytes(file.toPath()), headers, HttpStatus.OK);
     }
-
 }

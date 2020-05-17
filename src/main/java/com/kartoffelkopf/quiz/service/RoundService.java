@@ -1,5 +1,6 @@
 package com.kartoffelkopf.quiz.service;
 
+import com.itextpdf.text.Document;
 import com.itextpdf.text.DocumentException;
 import com.kartoffelkopf.quiz.model.Question;
 import com.kartoffelkopf.quiz.model.Quiz;
